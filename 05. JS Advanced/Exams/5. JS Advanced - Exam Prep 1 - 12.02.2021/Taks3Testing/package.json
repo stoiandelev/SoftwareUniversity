@@ -1,0 +1,15 @@
+{
+  "name": "taks3testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Task3.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3"
+  }
+}
