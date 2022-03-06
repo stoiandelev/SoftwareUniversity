@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data demo</title>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<a href="/Authentication.html">Login / Register</a>
+
+<form>
+    <label>Person:<input type="text" name="person"/> </label>
+    <label>Phone:<input type="text" name="phone"/> </label>
+    <input type="submit" value="Create Record"/>
+</form>
+
+
+<script>
+    let form = document.querySelector("form");
+    form.addEventListener("submit", onSubmit)
+
+    async function onSubmit(event) {
+        event.preventDefault();
+        let data = new FormData(form);
+
+        let person = data.get("person").trim();
+        let phone = data.get("phone").trim();
+        let record = {person, phone};
+
+        let result = await postData(record);
+
+        form.reset();
+        alert("Record create!");
+
+    }
+
+
+    //TODO: GET REQUEST   добави на всички функции error handling
+    async function getData() {
+        let url = "http://localhost:3030/jsonstore/phonebook";
+        let option = {
+            headers: {}
+        };
+        let token = sessionStorage.getItem("token");
+        if (token !== null) {
+            option.headers["X-Authorization"] = token;
+        }
+
+        let response = await fetch(url, option);
+        let data = await response.json()
+        return data;
+    }
+
+    //TODO: GET REQUEST BY ID
+    async function getDataByID(id) {
+        let url = "http://localhost:3030/jsonstore/phonebook/" + id;
+        let response = await fetch(url);
+        let data = await response.json()
+        return data;
+    }
+
+
+    //TODO: POST REQUEST
+    async function postData(data) {
+        let url = "http://localhost:3030/jsonstore/phonebook/";
+        //TODO: може да се подадат като параметър на функцията и ги пишем в браузъра във функцията
+        // let data = {
+        //     "person": "maria",
+        //     "phone": "+1-555-00000"
+        // }
+        let options = {
+            method: "post",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        };
+        try {
+            let response = await fetch(url, options);
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            let result = await response.json();
+            return result;
+        } catch (err) {
+
+        }
+
+    }
+
+    //TODO: GET UPDATE -> PUT or PATCH for current part; data е променливата в която държим променените данни.
+    async function updateDate(id, data) {
+        let url = "http://localhost:3030/jsonstore/phonebook/" + id;
+        let options = {
+            method: "put",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        };
+        let response = await fetch(url, options);
+        let result = await response.json();
+        return result;
+    }
+
+    //TODO: DELETE REQUEST
+    async function deleteDate(id) {
+        let url = "http://localhost:3030/jsonstore/phonebook/" + id;
+        let options = {
+            method: "delete",
+        };
+        let response = await fetch(url, options);
+        let result = await response.json();
+        return result;
+    }
+
+</script>
+</body>
+</html>

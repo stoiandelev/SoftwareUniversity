@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authentication Demo</title>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Register</h2>
+<form id="register-form">
+    <label>Email: <input type="text" name="email"/></label>
+    <label>Password: <input type="password" name="password"/></label>
+    <label>Repeat: <input type="password" name="repass"/></label>
+    <input type="submit" value="Register"/>
+</form>
+
+<h2>Login</h2>
+<form id="login-form">
+    <label>Email: <input type="text" name="email"/></label>
+    <label>Password: <input type="password" name="password"/></label>
+    <input type="submit" value="Login"/>
+</form>
+
+<script>
+    let registerForm = document.getElementById("register-form");
+    registerForm.addEventListener("submit", onRegister);
+
+    async function onRegister(event) {
+        let url = "http://localhost:3030/users/register";
+        event.preventDefault();
+        let formData = new FormData(registerForm);
+
+        let email = formData.get("email").trim();
+        let password = formData.get("password").trim();
+        let rePassword = formData.get("repass").trim();
+
+        let option = {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({email, password})
+        }
+
+        let response = await fetch(url, option);
+        let result = await response.json();
+
+        let token = result.accessToken;
+        sessionStorage.setItem("token", token);
+
+        window.location = "http://localhost:63342/Remote%20Data%20and%20Authentication-LAB/index.html?_ijt=fsq8o26il77r0995iuoqh2q9a0&_ij_reload=RELOAD_ON_SAVE";
+    }
+
+    let loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", onLogin);
+
+    async function onLogin(event) {
+        let url = "http://localhost:3030/users/login/";
+        event.preventDefault();
+        let formData = new FormData(loginForm);
+
+        let email = formData.get("email").trim();
+        let password = formData.get("password").trim();
+
+
+        try {
+
+            let option = {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({email, password})
+            }
+            let response = await fetch(url, option);
+
+            if (response.status !== 200) {
+                const error = await response.json();
+                throw new Error(`Error: ${error.message}`);
+            }
+
+
+            let result = await response.json();
+            let token = result.accessToken;
+            sessionStorage.setItem("token", token);
+            window.location = "http://localhost:63342/Remote%20Data%20and%20Authentication-LAB/index.html?_ijt=fsq8o26il77r0995iuoqh2q9a0&_ij_reload=RELOAD_ON_SAVE";
+
+        } catch (err) {
+            alert(err.message);
+        }
+
+    }
+
+
+</script>
+
+</body>
+</html>
