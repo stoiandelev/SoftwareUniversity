@@ -1,0 +1,39 @@
+import { html, updateBooks } from "./utility.js";
+
+let updateTemplate = (book, ctx) => html`
+<form @submit=${ev=> onSubmit(ev,ctx)} id="edit-form">
+    <input type="hidden" name="id" .value=${book._id} />
+    <h3>Edit book</h3>
+    <label>TITLE</label>
+    <input type="text" name="title" placeholder="Title..." .value=${book.title}>
+    <label>AUTHOR</label>
+    <input type="text" name="author" placeholder="Author..." .value=${book.author}>
+    <input type="submit" value="Save">
+</form>
+`;
+
+
+export function showUpdate(ctx) {
+    if(ctx.book == undefined) {
+        return null;
+    }else{
+        return updateTemplate(ctx.book, ctx);
+    }
+}
+
+async function onSubmit(event, ctx) {
+    event.preventDefault();
+
+    let formData = new FormData(event.target);
+
+    let id = formData.get('id');
+    let title = formData.get('title').trim();
+    let author = formData.get('author').trim();
+
+    let result = await updateBooks(id, { title, author });
+
+    event.target.reset();
+    delete ctx.book;
+    ctx.update();
+
+}
