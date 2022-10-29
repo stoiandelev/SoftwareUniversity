@@ -1,0 +1,17 @@
+examples:
+  basic.enabled: false
+  modifying.enabled: false
+
+
+#this is for timing to REST_Controller 60 500
+slos-config:
+  slos:
+    -
+      id: local_operation
+      threshold: 60
+    -
+      id: remote_operation
+      threshold: 500
+
+
+

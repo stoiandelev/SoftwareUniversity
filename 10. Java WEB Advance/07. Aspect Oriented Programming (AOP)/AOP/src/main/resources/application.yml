@@ -1,0 +1,17 @@
+examples:
+  basic.enabled: false
+  modifying.enabled: false
+
+
+#this is for check the time in MilliSeconds 1000 ms = 1s
+slos-config:
+  slos:
+    -
+      id: local_operation
+      threshold: 60
+    -
+      id: remote_operation
+      threshold: 500
+
+
+
