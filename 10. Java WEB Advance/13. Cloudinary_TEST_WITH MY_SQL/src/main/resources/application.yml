@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloudinary_TEST?useSSL=false&createDatabaseIfNotExist=true
+    password: 12345678
+    username: root
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+
+
+
+#Cloudinary Properties
+cloudinary:
+  api-key: 346427122949418
+  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: duuldaidw
+
+
+
